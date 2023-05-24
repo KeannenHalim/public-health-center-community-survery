@@ -81,3 +81,23 @@ CREATE TABLE AnswerGroup(
 	idAnswer int IDENTITY(1,1) PRIMARY KEY,
 	timeStamp datetime
 );
+
+-------------------------------------------------------------------------------------------------
+
+--DROP TABLE ChangeQuestions
+
+CREATE TABLE ChangeQuestions(
+	question varchar(256),
+	timeStamp datetime
+);
+
+-------------------------------------------------------------------------------------------------
+
+--DROP TABLE ChangeForms
+
+CREATE TABLE ChangForm(
+	title varchar(128),
+	timeStamp datetime
+);
+
+-------------------------------------------------------------------------------------------------
