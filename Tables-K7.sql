@@ -14,7 +14,8 @@ CREATE TABLE Role(
 CREATE TABLE User(
 	idUser int IDENTITY(1,1) PRIMARY KEY,
 	userName varchar(128),
-	password varchar(128)
+	password varchar(128),
+	fkRole int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -27,7 +28,9 @@ CREATE TABLE AnswerItemText(
 	id int IDENTITY(1,1) PRIMARY KEY,
 	answer varchar(256),
 	timestamp datetime,
-	isLatest bit
+	isLatest bit,
+	fkUser int,
+	fkAnswerGroup int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -38,7 +41,9 @@ CREATE TABLE AnswerItemNumeric(
 	id int IDENTITY(1,1) PRIMARY KEY,
 	answer varchar(256),
 	timestamp datetime,
-	isLatest bit
+	isLatest bit,
+	fkUser int,
+	fkAnswerGroup int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -49,7 +54,9 @@ CREATE TABLE AnswerItemDate(
 	id int IDENTITY(1,1) PRIMARY KEY,
 	answer varchar(256),
 	timestamp datetime,
-	isLatest bit
+	isLatest bit,
+	fkUser int,
+	fkAnswerGroup int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -60,7 +67,8 @@ CREATE TABLE Questions(
 	idQuestion int IDENTITY(1,1) PRIMARY KEY,
 	dataType char(1),
 	question varchar(256),
-	timeStamp datetime
+	timeStamp datetime,
+	isAlive bit --untuk mengetahui apakah pertanyaan sudah dihapus atau belum
 );
 
 -------------------------------------------------------------------------------------------------
@@ -70,7 +78,8 @@ CREATE TABLE Questions(
 CREATE TABLE Form(
 	idForm int IDENTITY(1,1) PRIMARY KEY,
 	title varchar(128),
-	timeStamp datetime
+	timeStamp datetime,
+	isAlive bit
 );
 
 -------------------------------------------------------------------------------------------------
@@ -79,25 +88,30 @@ CREATE TABLE Form(
 
 CREATE TABLE AnswerGroup(
 	idAnswer int IDENTITY(1,1) PRIMARY KEY,
-	timeStamp datetime
+	timeStamp datetime,
+	fkForm int
 );
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE ChangeQuestions
+--DROP TABLE LogChangeQuestions
 
-CREATE TABLE ChangeQuestions(
-	question varchar(256),
-	timeStamp datetime
+CREATE TABLE LogChangeQuestions(
+	prevValue varchar(256),
+	timeStamp datetime,
+	fkUser int,
+	fkQuestions int
 );
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE ChangeForm
+--DROP TABLE LogChangeForm
 
-CREATE TABLE ChangeForm(
-	title varchar(128),
-	timeStamp datetime
+CREATE TABLE LogChangeForm(
+	prevValue varchar(128),
+	timeStamp datetime,
+	fkUser int,
+	fkForm int
 );
 
 -------------------------------------------------------------------------------------------------
