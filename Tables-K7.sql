@@ -9,9 +9,9 @@ CREATE TABLE Role(
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE User;
+--DROP TABLE Users;
 
-CREATE TABLE User(
+CREATE TABLE Users(
 	idUser int IDENTITY(1,1) PRIMARY KEY,
 	userName varchar(128),
 	password varchar(128),
