@@ -8,6 +8,8 @@ ALTER FUNCTION parseKeyValue (
     )
 AS
 BEGIN
+    /*cursor untuk split pertama ketika
+    split oleh ';'*/
     DECLARE curValue CURSOR
     FOR
     SELECT 
@@ -16,10 +18,13 @@ BEGIN
         string_split(@answers,';')
 
     declare
+        /*temp variable untuk split oleh ';'*/
         @curBaris varchar(256),
+        /*temp variable untuk split oleh ':'*/
         @curKeyVal varchar(256),
         @i int,
         @j int
+
     SET @i = 0
     OPEN curValue
         FETCH NEXT FROM curValue INTO 
@@ -27,6 +32,8 @@ BEGIN
         
         WHILE @@FETCH_STATUS=0
         BEGIN 
+            /*cursor untuk membagi antara key 
+            dengan value*/
             DECLARE curBarisKeyValue CURSOR
             FOR
             SELECT
@@ -42,6 +49,7 @@ BEGIN
             SET @j = 0
             WHILE @@FETCH_STATUS=0
             BEGIN
+                /*kalau j 0 berarti key*/ 
                 IF @j = 0
                 BEGIN
                     INSERT INTO @keyValuePair ([id],[key])
@@ -49,6 +57,7 @@ BEGIN
                         @i as 'id',
                         @curKeyVal as 'key'
                 END
+                /*kalau j 1 berarti value*/ 
                 ELSE IF @j = 1
                 BEGIN
                     UPDATE @keyValuePair
