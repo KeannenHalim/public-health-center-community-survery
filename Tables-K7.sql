@@ -93,9 +93,9 @@ CREATE TABLE ChangeQuestions(
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE ChangeForms
+--DROP TABLE ChangeForm
 
-CREATE TABLE ChangForm(
+CREATE TABLE ChangeForm(
 	title varchar(128),
 	timeStamp datetime
 );
