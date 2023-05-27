@@ -30,7 +30,8 @@ CREATE TABLE AnswerItemText(
 	timestamp datetime,
 	isLatest bit,
 	fkUser int,
-	fkAnswerGroup int
+	fkAnswerGroup int,
+	fkQuestion int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -43,7 +44,8 @@ CREATE TABLE AnswerItemNumeric(
 	timestamp datetime,
 	isLatest bit,
 	fkUser int,
-	fkAnswerGroup int
+	fkAnswerGroup int,
+	fkQuestion int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -56,7 +58,8 @@ CREATE TABLE AnswerItemDate(
 	timestamp datetime,
 	isLatest bit,
 	fkUser int,
-	fkAnswerGroup int
+	fkAnswerGroup int,
+	fkQuestion int
 );
 
 -------------------------------------------------------------------------------------------------
@@ -67,7 +70,7 @@ CREATE TABLE Questions(
 	idQuestion int IDENTITY(1,1) PRIMARY KEY,
 	dataType char(1),
 	question varchar(256),
-	timeStamp datetime,
+	[timestamp] datetime,
 	isAlive bit --untuk mengetahui apakah pertanyaan sudah dihapus atau belum
 );
 
@@ -84,7 +87,7 @@ CREATE TABLE Form(
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE AnswerGroup
+-- DROP TABLE AnswerGroup
 
 CREATE TABLE AnswerGroup(
 	idAnswer int IDENTITY(1,1) PRIMARY KEY,
