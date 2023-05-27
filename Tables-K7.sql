@@ -9,11 +9,11 @@ CREATE TABLE Role(
 
 -------------------------------------------------------------------------------------------------
 
---DROP TABLE Users;
+-- DROP TABLE Users;
 
 CREATE TABLE Users(
 	idUser int IDENTITY(1,1) PRIMARY KEY,
-	userName varchar(128),
+	username varchar(128),
 	password varchar(128),
 	fkRole int
 );
