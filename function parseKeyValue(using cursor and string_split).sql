@@ -3,7 +3,7 @@ ALTER FUNCTION parseKeyValue (
 )
     RETURNS @keyValuePair TABLE(
         id int,
-        [key] varchar(256),
+        [key] int,
         [value] varchar(256)
     )
 AS
@@ -15,7 +15,7 @@ BEGIN
     SELECT 
         value
     FROM 
-        string_split(@answers,';')
+        string_split(@answers,',')
 
     declare
         /*temp variable untuk split oleh ';'*/
@@ -39,7 +39,7 @@ BEGIN
             SELECT
                 value
             FROM 
-                string_split(@curBaris,':')
+                string_split(@curBaris,';')
 
             OPEN curBarisKeyValue
 
@@ -87,4 +87,4 @@ END
 -- SELECT 
 --     [key],[value]
 -- FROM
---     parseKeyValue('name:ken;age:27;tanggal:2011-05-31T00:00:00')
+--     parseKeyValue('1;12,2;Ken,3;2023-05-27 14:01:19')
