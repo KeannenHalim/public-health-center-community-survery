@@ -1,18 +1,22 @@
 ALTER PROCEDURE spCreateForm
 	@title varchar(256)
 AS
-	INSERT INTO Form (title, timeStamp, isAlive)
-	SELECT
-		@title,
-		GETDATE(),
-		1
+	BEGIN TRANSACTION
 
-	SELECT
-		idForm
-	FROM
-		Form
-	WHERE
-		title = @title
+		INSERT INTO Form (title, timeStamp, isAlive)
+		SELECT
+			@title,
+			GETDATE(),
+			1
+
+		SELECT
+			idForm
+		FROM
+			Form
+		WHERE
+			title = @title
+
+	COMMIT TRANSACTION
 
 --EXEC spCreateForm 'test form'
 --SELECT * FROM Form
