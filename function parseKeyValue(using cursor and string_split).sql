@@ -9,7 +9,7 @@ ALTER FUNCTION parseKeyValue (
 AS
 BEGIN
     /*cursor untuk split pertama ketika
-    split oleh ';'*/
+    split oleh ','*/
     DECLARE curValue CURSOR
     FOR
     SELECT 
@@ -18,9 +18,9 @@ BEGIN
         string_split(@answers,',')
 
     declare
-        /*temp variable untuk split oleh ';'*/
+        /*temp variable untuk split oleh ','*/
         @curBaris varchar(256),
-        /*temp variable untuk split oleh ':'*/
+        /*temp variable untuk split oleh ';'*/
         @curKeyVal varchar(256),
         @i int,
         @j int
