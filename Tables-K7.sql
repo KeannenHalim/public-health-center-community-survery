@@ -71,7 +71,8 @@ CREATE TABLE Questions(
 	dataType char(1),
 	question varchar(256),
 	[timestamp] datetime,
-	isAlive bit --untuk mengetahui apakah pertanyaan sudah dihapus atau belum
+	isAlive bit, --untuk mengetahui apakah pertanyaan sudah dihapus atau belum
+	fkForm INT
 );
 
 -------------------------------------------------------------------------------------------------
