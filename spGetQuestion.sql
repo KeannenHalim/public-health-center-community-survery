@@ -13,4 +13,4 @@ AS
 
 	COMMIT TRANSACTION
 
---EXEC PROCEDURE spGetQuestion 1
+--EXEC spGetQuestion 1
