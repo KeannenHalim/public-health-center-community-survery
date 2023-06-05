@@ -1,4 +1,5 @@
 ALTER PROCEDURE spCreateQuestion
+	@idForm INT,
 	@questions varchar(MAX)
 AS
 	DECLARE
@@ -8,15 +9,16 @@ AS
 		SELECT
             @timeNow = GETDATE()
 
-		INSERT INTO Questions (dataType,question,[timeStamp],isAlive)
+		INSERT INTO Questions (dataType,question,[timeStamp],isAlive,fkForm)
 		SELECT
 			[key] as 'dataType',
 			[value] as 'question',
 			@timeNow as 'timestamp',
-			1 as 'isAlive'
+			1 as 'isAlive',
+			@idForm as 'fkForm'
 		FROM
 			parseKeyCharValueVarchar(@questions)
 	COMMIT TRANSACTION
 
 --EXEC spCreateQuestion 'N;banyak istri,T;nama istri,D;ttl istri'
--- SELECT * FROM Questions
+--SELECT * FROM Questions
