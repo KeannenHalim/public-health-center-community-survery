@@ -185,5 +185,8 @@ EXEC dbo.spInputAnswer '1;Dalima Kusmawati,2;1999-01-01,3;93,4;Wanita,5;Magister
 EXEC dbo.spInputAnswer '1;Kiandra Sudiati,2;1999-01-01,3;87,4;Wanita,5;Doktor,6;PNS,7;8986380,8;b. Tidak,9;b. Tradisional/Alternatif,10;d. Lebih dari 10 KM,11;Kendaraan umum,12;c. Asuransi swasta', 5, 1
 
 SELECT * FROM AnswerGroup
+SELECT * FROM AnswerItemDate
+SELECT * FROM AnswerItemNumeric
+SELECT * FROM AnswerItemText
 
 --EXEC dbo.spCreateForm 'Survei Rumah dan Lingkungan'
