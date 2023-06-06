@@ -18,11 +18,6 @@ ALTER TABLE AnswerItemText
 ADD CONSTRAINT FK_AnswerItemText_User
 FOREIGN KEY (fkUser) REFERENCES Users(idUser)
 
---AnswerItemText
-ALTER TABLE AnswerItemText
-ADD CONSTRAINT FK_AnswerItemText_User
-FOREIGN KEY (fkUser) REFERENCES Users(idUser)
-
 ALTER TABLE AnswerItemText
 ADD CONSTRAINT FK_AnswerItemText_AnswerGroup
 FOREIGN KEY (fkAnswerGroup) REFERENCES AnswerGroup(idAnswer)

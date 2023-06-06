@@ -20,5 +20,5 @@ AS
 			parseKeyCharValueVarchar(@questions)
 	COMMIT TRANSACTION
 
---EXEC spCreateQuestion 'N;banyak istri,T;nama istri,D;ttl istri'
+-- EXEC spCreateQuestion 1, 'N;banyak istri,T;nama istri,D;ttl istri'
 --SELECT * FROM Questions

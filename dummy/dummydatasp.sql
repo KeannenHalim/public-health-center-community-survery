@@ -19,12 +19,12 @@ VALUES
 --SELECT idUser, username, roleName FROM Users INNER JOIN [Role] ON Users.fkRole=[Role].idRole
 
 --EXEC DELETE DULU
---DELETE FROM AnswerItemDate
---DELETE FROM AnswerItemNumeric
---DELETE FROM AnswerItemText
---DELETE FROM AnswerGroup
---DELETE FROM Questions
---DELETE FROM Form
+-- DELETE FROM AnswerItemDate
+-- DELETE FROM AnswerItemNumeric
+-- DELETE FROM AnswerItemText
+-- DELETE FROM AnswerGroup
+-- DELETE FROM Questions
+-- DELETE FROM Form
 
 EXEC dbo.spCreateForm 'Survei Akses Pelayanan dan Pembiayaan Kesehatan'
 EXEC dbo.spCreateQuestion 1, 'T;Nama Lengkap,D;Tanggal Lahir,T;Umur,T;Jenis Kelamin,T;Pendidikan,T;Pekerjaan,N;Jumlah Penghasilan per Bulan,T;Penerima BLT?'
