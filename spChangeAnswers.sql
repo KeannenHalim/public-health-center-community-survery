@@ -6,7 +6,7 @@ ALTER PROCEDURE spChangeAnswer
 AS
     create table #keyValueTable (
         [key] int,
-        [value] varchar(256),
+        [value] varchar(150),
         dataType char(1)
     )
 

@@ -1,23 +1,43 @@
 ALTER PROCEDURE spChangeQuestion
 	@idUser int,
-	@idQuestion int,
-	@newQuestion varchar(256)
+	@Questions varchar(MAX)
 AS
 	DECLARE
-		@oldQuestion varchar(256)
+		@oldQuestion varchar(250),
+		@timestamp datetime,
+		@idQuestion INT,
+		@newQuestion VARCHAR(250)
 
+	SELECT @timestamp = GETDATE()
+
+	DECLARE curQuest CURSOR
+	FOR
 	SELECT
-		@oldQuestion = question
-	FROM
-		Questions
-	WHERE
-		idQuestion = @idQuestion
+		[key],
+		[value]
+	FROM 
+		parseKeyValue(@Questions)
 
-	BEGIN TRANSACTION
+	OPEN curQuest
+
+	FETCH NEXT FROM curQuest INTO
+		@idQuestion,
+		@newQuestion
+	
+	WHILE @@FETCH_STATUS=0
+	BEGIN
+		SELECT
+			@oldQuestion = question
+		FROM
+			Questions
+		WHERE
+			idQuestion = @idQuestion
+			
+
+		BEGIN TRANSACTION
 		
 		INSERT INTO LogChangeQuestions (prevValue, [timeStamp], fkUser, fkQuestions)
-		VALUES (@oldQuestion, GETDATE(), @idUser, @idQuestion)
-
+		VALUES (@oldQuestion, @timestamp, @idUser, @idQuestion)
 
 		UPDATE Questions
 		SET
@@ -25,4 +45,18 @@ AS
 		WHERE
 			idQuestion = @idQuestion
 
-	COMMIT TRANSACTION
+		COMMIT TRANSACTION
+		
+		FETCH NEXT FROM curQuest INTO
+		@idQuestion,
+		@newQuestion
+	END
+
+	CLOSE curQuest
+	DEALLOCATE curQuest
+
+
+-- EXEC spChangeQuestion 1 , '2;Lahir tanggal,1;nama lengkap banget'
+
+-- SELECT *
+-- FROM Questions

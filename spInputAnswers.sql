@@ -3,9 +3,10 @@ ALTER PROCEDURE spInputAnswer
     @idUser INT,
     @idForm INT
 AS
+    --untuk menyimpan pasangan key value yang sudah di parse
     create table #keyValueTable (
         [key] int,
-        [value] varchar(256),
+        [value] varchar(150),
         dataType char(1)
     )
 
@@ -26,12 +27,15 @@ AS
         SELECT
             @timeNow = GETDATE()
 
+        --insert ke tabel AnswerGroup
         INSERT INTO AnswerGroup (fkForm,[timeStamp])
         VALUES(@idForm,@timeNow)
 
+        --ambil identity dari record yang baru dimasukkan
         SELECT 
             @idAnswerGroup=@@IDENTITY
         
+        --insert jawaban ke answer item text
         INSERT INTO AnswerItemText
         SELECT
             [value],
@@ -45,9 +49,10 @@ AS
         WHERE
             dataType = 'T'
 
+        --insert jawaban ke answer item numeric
         INSERT INTO AnswerItemNumeric
         SELECT
-            [value],
+            convert(int,[value]),
             @timeNow,
             1,
             @idUser,
@@ -58,9 +63,10 @@ AS
         WHERE
             dataType = 'N'
 
+        --insert jawaban ke answer item date
         INSERT INTO AnswerItemDate
         SELECT
-            [value],
+            convert(date,[value]),
             @timeNow,
             1,
             @idUser,

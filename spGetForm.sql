@@ -1,5 +1,6 @@
 ALTER PROCEDURE spGetForm (
-	@title VARCHAR(256)
+	@title VARCHAR(128),
+	@isAlive bit
 )
 AS
 	IF @title IS NULL
@@ -9,6 +10,8 @@ AS
 			Title
 		FROM
 			Form
+		WHERE
+			isAlive = @isAlive
 	END
 	ELSE
 	BEGIN
@@ -18,8 +21,9 @@ AS
 		FROM
 			Form
 		WHERE
-			title LIKE '%@title%'
+			title LIKE CONCAT('%',@title,'%') AND isAlive = @isAlive
 	END
 
---EXEC spGetForm NULL
+--EXEC spGetForm NULL,1
+--EXEC spGetForm 'akses' ,0
 --SELECT * FROM Form

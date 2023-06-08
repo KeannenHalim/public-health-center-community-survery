@@ -1,8 +1,7 @@
 ALTER PROCEDURE spCreateForm
-	@title varchar(256)
+	@title varchar(128)
 AS
 	BEGIN TRANSACTION
-
 		INSERT INTO Form (title, timeStamp, isAlive)
 		SELECT
 			@title,

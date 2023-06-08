@@ -29,5 +29,5 @@ AS
     CLOSE curId
     DEALLOCATE curId
 
--- EXEC spDeleteQuestion '2002;2003'
+-- EXEC spDeleteQuestion '1;2'
 -- SELECT * FROM Questions

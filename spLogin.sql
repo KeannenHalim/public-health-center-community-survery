@@ -1,11 +1,11 @@
 ALTER PROCEDURE spLogin
-    @username varchar(128),
-    @password varchar(128)
+    @username varchar(30),
+    @password varchar(30)
 AS
     DECLARE
         @idUser int,
         @idRole int,
-        @roleName varchar(32)
+        @roleName varchar(20)
 
     SELECT
         @idUser = idUser,
@@ -26,4 +26,4 @@ AS
         @idUser as 'idUser',
         @roleName as 'role'
 
--- exec spLogin 'admin','admin'
+-- exec spLogin 'admin','password'
