@@ -1,11 +1,12 @@
---cek kalau di answer group emg gada jawabannya jadi isi tablenya kosong
 ALTER PROCEDURE spGenerateTablePivot
-    @idForm INT
+    @idForm INT,
+    @filter NVARCHAR(1000)
 AS
     DECLARE 
         @columnNumeric NVARCHAR(256),
         @columnDate NVARCHAR(256),
         @columnText NVARCHAR(256),
+        @columnResult NVARCHAR(256),
         @guid1 NVARCHAR(2000),
         @queryText NVARCHAR(4000),
         @currCol VARCHAR(4)
@@ -13,27 +14,36 @@ AS
     SET @columnNumeric = ''
     SET @columnDate = ''
     SET @columnText = ''
+    SET @columnResult = ''
     SELECT @guid1=REPLACE(NEWID(),'-','')
-
+    SELECT @filter=REPLACE(@filter,';',' AND ')
+    --untuk menyimpan question yang sesuai dengan id form yang diinginkan
     CREATE table #tempQuestion(
         idQuestion INT,
-        question VARCHAR(500)
+        question VARCHAR(250),
+        dataType char(1)
     )
 
     INSERT INTO #tempQuestion
     SELECT
         idQuestion,
-        question
+        question,
+        dataType
     FROM 
         Questions
     WHERE 
         fkForm = @idForm
 
+    SELECT
+        @columnResult+=QUOTENAME(idQuestion)+','
+    FROM 
+        #tempQuestion
+
     --temp untuk answer item text
     create table #tempAnswerItemText(
         idAnswerGroup INT,
         idQuestion INT,
-        answer VARCHAR(256)
+        answer VARCHAR(150)
     )
 
     --temp untuk answer item Numeric
@@ -47,7 +57,7 @@ AS
     create table #tempAnswerItemDate(
         idAnswerGroup INT,
         idQuestion INT,
-        answer DATETIME
+        answer DATE
     )
 
     --untuk answer item text
@@ -84,18 +94,17 @@ AS
     FETCH NEXT FROM curItemText INTO
         @currCol
 
+    --ambil semua kolom distinct nya
     WHILE @@FETCH_STATUS=0
     BEGIN 
         SET @columnText += '['+@currCol+'],'
-        SET @queryText += '['+@currCol+']'+' VARCHAR(256),'
+        SET @queryText += '['+@currCol+']'+' VARCHAR(150),'
         FETCH NEXT FROM curItemText INTO
             @currCol
     END
 
     CLOSE curItemText
     DEALLOCATE curItemText
-
-    SET @columnText = LEFT(@columnText, LEN(@columnText)-1)
 
     SET @queryText = LEFT(@queryText,LEN(@queryText)-1)
 
@@ -105,18 +114,23 @@ AS
     EXEC sp_executesql @queryText
 
     --masukkan hasilnya pivot ke dalam global temp table
-    SET @queryText = '
-    INSERT INTO ##tempText_'+@guid1+'
-    SELECT '+ 'idAnswerGroup,' +
-        @columnText+
-    ' FROM 
-        #tempAnswerItemText
-    PIVOT
-    (
-        min(answer)
-        FOR idQuestion in ('+@columnText+')
-    )as p'
-    EXEC sp_executesql @queryText
+    IF(LEN(@columnText) != 0)
+    BEGIN
+        SET @columnText = LEFT(@columnText, LEN(@columnText)-1)
+    
+        SET @queryText = '
+        INSERT INTO ##tempText_'+@guid1+'
+        SELECT '+ 'idAnswerGroup,' +
+            @columnText+
+        ' FROM 
+            #tempAnswerItemText
+        PIVOT
+        (
+            min(answer)
+            FOR idQuestion in ('+@columnText+')
+        )as p'
+        EXEC sp_executesql @queryText
+    END
 
     --untuk answer item Numeric
     --pilih sesuai dengan form yang diinginkan
@@ -152,18 +166,17 @@ AS
     FETCH NEXT FROM curItemText INTO
         @currCol
 
+    --ambil semua kolom distinct nya
     WHILE @@FETCH_STATUS=0
     BEGIN 
         SET @columnNumeric += '['+@currCol+'],'
-        SET @queryText += '['+@currCol+']'+' VARCHAR(256),'
+        SET @queryText += '['+@currCol+']'+' INT,'
         FETCH NEXT FROM curItemText INTO
             @currCol
     END
 
     CLOSE curItemText
     DEALLOCATE curItemText
-
-    SET @columnNumeric = LEFT(@columnNumeric, LEN(@columnNumeric)-1)
 
     SET @queryText = LEFT(@queryText,LEN(@queryText)-1)
 
@@ -173,18 +186,23 @@ AS
     EXEC sp_executesql @queryText
 
     --masukkan hasilnya pivot ke dalam global temp table
-    SET @queryText = '
-    INSERT INTO ##tempNumeric_'+@guid1+'
-    SELECT '+ 'idAnswerGroup,' +
-        @columnNumeric+
-    ' FROM 
-        #tempAnswerItemNumeric
-    PIVOT
-    (
-        min(answer)
-        FOR idQuestion in ('+@columnNumeric+')
-    )as p'
-    EXEC sp_executesql @queryText
+     IF(LEN(@columnNumeric) != 0)
+    BEGIN
+        SET @columnNumeric = LEFT(@columnNumeric, LEN(@columnNumeric)-1)
+    
+        SET @queryText = '
+        INSERT INTO ##tempNumeric_'+@guid1+'
+        SELECT '+ 'idAnswerGroup,' +
+            @columnNumeric+
+        ' FROM 
+            #tempAnswerItemNumeric
+        PIVOT
+        (
+            min(answer)
+            FOR idQuestion in ('+@columnNumeric+')
+        )as p'
+        EXEC sp_executesql @queryText
+    END
 
      --untuk answer item Date
     --pilih sesuai dengan form yang diinginkan
@@ -220,18 +238,17 @@ AS
     FETCH NEXT FROM curItemText INTO
         @currCol
 
+    --ambil semua kolom distinct nya
     WHILE @@FETCH_STATUS=0
     BEGIN 
         SET @columnDate += '['+@currCol+'],'
-        SET @queryText += '['+@currCol+']'+' VARCHAR(256),'
+        SET @queryText += '['+@currCol+']'+' DATE,'
         FETCH NEXT FROM curItemText INTO
             @currCol
     END
 
     CLOSE curItemText
     DEALLOCATE curItemText
-
-    SET @columnDate = LEFT(@columnDate, LEN(@columnDate)-1)
 
     SET @queryText = LEFT(@queryText,LEN(@queryText)-1)
 
@@ -241,28 +258,45 @@ AS
     EXEC sp_executesql @queryText
 
     --masukkan hasilnya pivot ke dalam global temp table
-    SET @queryText = '
-    INSERT INTO ##tempDate_'+@guid1+'
-    SELECT '+ 'idAnswerGroup,' +
-        @columnDate+
-    ' FROM 
-        #tempAnswerItemDate
-    PIVOT
-    (
-        min(answer)
-        FOR idQuestion in ('+@columnDate+')
-    )as p'
-    EXEC sp_executesql @queryText
+     IF(LEN(@columnDate) != 0)
+    BEGIN
+        SET @columnDate = LEFT(@columnDate, LEN(@columnDate)-1)
 
-    --untuk lihat hasilnya
-    SET @queryText = 'select * from ##tempText_'+@guid1
-    EXEC sp_executesql @queryText
+        SET @queryText = '
+        INSERT INTO ##tempDate_'+@guid1+'
+        SELECT '+ 'idAnswerGroup,' +
+            @columnDate+
+        ' FROM 
+            #tempAnswerItemDate
+        PIVOT
+        (
+            min(answer)
+            FOR idQuestion in ('+@columnDate+')
+        )as p'
+        EXEC sp_executesql @queryText
+    END
 
-    SET @queryText = 'select * from ##tempNumeric_'+@guid1
-    EXEC sp_executesql @queryText
+    IF(LEN(@columnResult) != 0)
+    BEGIN
+        SET @columnResult = LEFT(@columnResult,LEN(@columnResult)-1)
+    END
 
-    SET @queryText = 'select * from ##tempDate_'+@guid1
+    SET @queryText ='select '+@columnResult+' from '+
+                    CONCAT('##tempText_',@guid1)+' inner join '+
+                    CONCAT('##tempNumeric_',@guid1)+' ON '+CONCAT('##tempText_',@guid1)+
+                    '.idAnswerGroup = '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup'+
+                    ' inner join '+CONCAT('##tempDate_',@guid1)+' ON '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup = '+
+                    CONCAT('##tempDate_',@guid1)+'.idAnswerGroup'
+    
+    IF @filter is not NULL
+    BEGIN
+        SET @queryText = @queryText+ ' WHERE '+@filter
+    END
     EXEC sp_executesql @queryText
+    
+    SELECT *
+    FROM 
+        #tempQuestion
 
     --untuk drop tablenya
     SET @queryText = 'drop table ##tempText_'+@guid1
@@ -274,4 +308,13 @@ AS
     SET @queryText = 'drop table ##tempDate_'+@guid1
     EXEC sp_executesql @queryText
 
-exec spGenerateTablePivot 1
+-- exec spGenerateTablePivot 1, '[3]>77;[4]=''Pria'''
+--untuk lihat hasilnya
+    -- SET @queryText = 'select * from ##tempText_'+@guid1
+    -- EXEC sp_executesql @queryText
+
+    -- SET @queryText = 'select * from ##tempNumeric_'+@guid1
+    -- EXEC sp_executesql @queryText
+
+    -- SET @queryText = 'select * from ##tempDate_'+@guid1
+    -- EXEC sp_executesql @queryText

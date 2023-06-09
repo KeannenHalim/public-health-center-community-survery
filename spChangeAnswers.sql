@@ -89,7 +89,7 @@ AS
             WHERE fkAnswerGroup = @idAnswerGroup AND fkQuestion = @currKey
 
             INSERT INTO AnswerItemNumeric (answer,[timestamp],isLatest,fkUser,fkAnswerGroup,fkQuestion)
-            VALUES (@currValue,@timeNow,1,@idUser,@idAnswerGroup,@currKey)
+            VALUES (convert(int,@currValue),@timeNow,1,@idUser,@idAnswerGroup,@currKey)
 
 
             FETCH NEXT FROM curAnswer INTO
@@ -123,7 +123,7 @@ AS
             WHERE fkAnswerGroup = @idAnswerGroup AND fkQuestion = @currKey
 
             INSERT INTO AnswerItemDate (answer,[timestamp],isLatest,fkUser,fkAnswerGroup,fkQuestion)
-            VALUES (@currValue,@timeNow,1,@idUser,@idAnswerGroup,@currKey)
+            VALUES (convert(date,@currValue),@timeNow,1,@idUser,@idAnswerGroup,@currKey)
 
 
             FETCH NEXT FROM curAnswer INTO
@@ -135,4 +135,4 @@ AS
         DEALLOCATE curAnswer
     COMMIT TRANSACTION;
 
--- exec spChangeAnswer '2;13,3;Kenen,4;2023-05-29 14:01:19', 1,1,1
+-- exec spChangeAnswer '1;Cagak Thamrin,2;1999-01-01,3;77,4;Pria,5;Sarjana,6;Wirausaha,7;1786383,8;a. Ya,9;b. Tradisional/Alternatif,10;a. Kurang dari 1 KM,11;Kendaraan umum,12;a. BPJ', 3, 1,1
