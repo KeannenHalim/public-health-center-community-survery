@@ -6,6 +6,7 @@ AS
         @columnNumeric NVARCHAR(256),
         @columnDate NVARCHAR(256),
         @columnText NVARCHAR(256),
+        @columnResult NVARCHAR(500),
         @guid1 NVARCHAR(2000),
         @queryText NVARCHAR(4000),
         @currCol VARCHAR(4)
@@ -13,6 +14,7 @@ AS
     SET @columnNumeric = ''
     SET @columnDate = ''
     SET @columnText = ''
+    SET @columnResult = ''
 
     SELECT @guid1=REPLACE(NEWID(),'-','')
     SELECT @filter=REPLACE(@filter,';',' AND ')
@@ -111,7 +113,7 @@ AS
     IF(LEN(@columnText) != 0)
     BEGIN
         SET @columnText = LEFT(@columnText, LEN(@columnText)-1)
-    
+        SET @columnResult+= @columnText
         SET @queryText = '
         INSERT INTO ##tempText_'+@guid1+'
         SELECT '+ 'idAnswerGroup,' +
@@ -183,7 +185,7 @@ AS
      IF(LEN(@columnNumeric) != 0)
     BEGIN
         SET @columnNumeric = LEFT(@columnNumeric, LEN(@columnNumeric)-1)
-    
+        SET @columnResult+=','+@columnNumeric
         SET @queryText = '
         INSERT INTO ##tempNumeric_'+@guid1+'
         SELECT '+ 'idAnswerGroup,' +
@@ -255,7 +257,7 @@ AS
      IF(LEN(@columnDate) != 0)
     BEGIN
         SET @columnDate = LEFT(@columnDate, LEN(@columnDate)-1)
-
+        SET @columnResult+=','+@columnDate
         SET @queryText = '
         INSERT INTO ##tempDate_'+@guid1+'
         SELECT '+ 'idAnswerGroup,' +
@@ -269,8 +271,13 @@ AS
         )as p'
         EXEC sp_executesql @queryText
     END
-
-    SET @queryText ='select * from '+
+    SET @queryText ='select '+CONCAT('##tempText_',@guid1)+
+                    '.idAnswerGroup'
+    IF LEN(@columnResult) != 0
+    BEGIN
+        SET @queryText+=','
+    END
+    SET @queryText+=@columnResult+' from '+
                     CONCAT('##tempText_',@guid1)+' full outer join '+
                     CONCAT('##tempNumeric_',@guid1)+' ON '+CONCAT('##tempText_',@guid1)+
                     '.idAnswerGroup = '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup'+
