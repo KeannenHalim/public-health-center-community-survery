@@ -1,6 +1,7 @@
-ALTER PROCEDURE spGenerateTablePivot
+ALTER PROCEDURE spCreateReport
     @idForm INT,
-    @filter NVARCHAR(1000)
+    @filter NVARCHAR(1000),
+    @agregat NVARCHAR(1000)
 AS
     DECLARE 
         @columnNumeric NVARCHAR(256),
@@ -270,7 +271,16 @@ AS
         EXEC sp_executesql @queryText
     END
 
-    SET @queryText ='select * from '+
+    SET @queryText ='select '
+    IF @agregat is not null
+    BEGIN
+        SET @queryText += @agregat
+    END
+    ELSE
+    BEGIN
+        SET @queryText+='*'
+    END
+    SET @queryText+=' from '+
                     CONCAT('##tempText_',@guid1)+' full outer join '+
                     CONCAT('##tempNumeric_',@guid1)+' ON '+CONCAT('##tempText_',@guid1)+
                     '.idAnswerGroup = '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup'+
@@ -282,10 +292,6 @@ AS
         SET @queryText = @queryText+ ' WHERE '+@filter
     END
     EXEC sp_executesql @queryText
-    
-    SELECT *
-    FROM 
-        #tempQuestion
 
     --untuk drop tablenya
     SET @queryText = 'drop table ##tempText_'+@guid1
@@ -297,7 +303,8 @@ AS
     SET @queryText = 'drop table ##tempDate_'+@guid1
     EXEC sp_executesql @queryText
 
--- exec spGenerateTablePivot 1, null
+--exec spCreateReport 1, null,null
+-- exec spCreateReport 1, null, 'avg([7]) as [rata7], min([7]) as [min7]'
 --untuk lihat hasilnya
     -- SET @queryText = 'select * from ##tempText_'+@guid1
     -- EXEC sp_executesql @queryText
