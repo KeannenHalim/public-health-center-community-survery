@@ -21,7 +21,7 @@ AS
 		FROM
 			Questions
 		WHERE
-			fkForm=@idForm
+			fkForm=@idForm AND isAlive = 1
 
 	INSERT INTO #tblAnswers
 		SELECT
@@ -30,7 +30,7 @@ AS
 		FROM
 			AnswerItemText
 		WHERE
-			fkAnswerGroup=@idAnswerGroup
+			fkAnswerGroup=@idAnswerGroup AND isLatest = 1
 
 	INSERT INTO #tblAnswers
 		SELECT
@@ -39,7 +39,7 @@ AS
 		FROM
 			AnswerItemDate
 		WHERE
-			fkAnswerGroup=@idAnswerGroup
+			fkAnswerGroup=@idAnswerGroup AND isLatest = 1
 
 	INSERT INTO #tblAnswers
 		SELECT
@@ -48,7 +48,7 @@ AS
 		FROM
 			AnswerItemNumeric
 		WHERE
-			fkAnswerGroup=@idAnswerGroup
+			fkAnswerGroup=@idAnswerGroup AND isLatest = 1
 
 	SELECT
 		dataType,
@@ -58,4 +58,4 @@ AS
 		#tblQuestions LEFT JOIN #tblAnswers
 			ON #tblQuestions.idQuestion=#tblAnswers.fkQuestion
 
-EXEC spGetQuestionAnswer 1, 1
+-- EXEC spGetQuestionAnswer 1, 1
