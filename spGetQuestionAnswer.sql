@@ -58,4 +58,4 @@ AS
 		#tblQuestions LEFT JOIN #tblAnswers
 			ON #tblQuestions.idQuestion=#tblAnswers.fkQuestion
 
--- EXEC spGetQuestionAnswer 1, 1
+-- EXEC spGetQuestionAnswer 2, 1
