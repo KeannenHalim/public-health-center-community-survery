@@ -11,4 +11,4 @@ AS
 			idForm = @idForm
 	COMMIT TRANSACTION
 
-EXEC spDeleteForm 1
+-- EXEC spDeleteForm 1
