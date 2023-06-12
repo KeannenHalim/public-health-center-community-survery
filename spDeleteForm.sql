@@ -2,16 +2,6 @@ ALTER PROCEDURE spDeleteForm
 	@idUser INT,
 	@idForm INT
 AS
-	DECLARE 
-		@prevTitle VARCHAR(128)
-
-	SELECT
-		@prevTitle=title
-	FROM
-		Form
-	WHERE
-		idForm=@idForm
-
 	BEGIN TRANSACTION
 		UPDATE Form
 		SET
