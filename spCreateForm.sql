@@ -8,14 +8,9 @@ AS
 			GETDATE(),
 			1
 
-		SELECT
-			idForm
-		FROM
-			Form
-		WHERE
-			title = @title
+		SELECT idForm=@@IDENTITY
 
 	COMMIT TRANSACTION
 
---EXEC spCreateForm 'test form'
+--EXEC spCreateForm 'test form2'
 --SELECT * FROM Form
