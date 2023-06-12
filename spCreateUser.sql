@@ -6,15 +6,21 @@ AS
 	DECLARE
 		@idRole INT
 
-	SELECT
-		@idRole=idRole
-	FROM
-		[Role]
-	WHERE
-		roleName=@role
+	BEGIN TRANSACTION
+		SELECT
+			@idRole=idRole
+		FROM
+			[Role]
+		WHERE
+			roleName=@role
+	COMMIT TRANSACTION
 
-	INSERT INTO Users (username, [password], fkRole)
-	VALUES (@username, @password, @idRole)
+	BEGIN TRANSACTION
+		INSERT INTO 
+			Users (username, [password], fkRole)
+		VALUES 
+			(@username, @password, @idRole)
+	COMMIT TRANSACTION
 
 --SELECT * FROM [Role]
 --SELECT * FROM Users

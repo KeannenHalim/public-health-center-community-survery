@@ -5,23 +5,27 @@ ALTER PROCEDURE spGetForm (
 AS
 	IF @title IS NULL
 	BEGIN
-		SELECT
-			idForm,
-			Title
-		FROM
-			Form
-		WHERE
-			isAlive = @isAlive
+		BEGIN TRANSACTION
+			SELECT
+				idForm,
+				Title
+			FROM
+				Form
+			WHERE
+				isAlive = @isAlive
+		COMMIT TRANSACTION
 	END
 	ELSE
 	BEGIN
-		SELECT
-			idForm,
-			title
-		FROM
-			Form
-		WHERE
-			title LIKE CONCAT('%',@title,'%') AND isAlive = @isAlive
+		BEGIN TRANSACTION
+			SELECT
+				idForm,
+				title
+			FROM
+				Form
+			WHERE
+				title LIKE CONCAT('%',@title,'%') AND isAlive = @isAlive
+		COMMIT TRANSACTION
 	END
 
 --EXEC spGetForm NULL,1
