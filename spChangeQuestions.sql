@@ -1,4 +1,4 @@
-ALTER PROCEDURE spChangeQuestion
+ALTER PROCEDURE spChangeQuestions
 	@idUser int,
 	@Questions varchar(MAX)
 AS
