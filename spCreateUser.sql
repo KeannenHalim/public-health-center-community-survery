@@ -13,12 +13,8 @@ AS
 	WHERE
 		roleName=@role
 
-	BEGIN TRANSACTION
-
 	INSERT INTO Users (username, [password], fkRole)
 	VALUES (@username, @password, @idRole)
-	
-	COMMIT TRANSACTION
 
 --SELECT * FROM [Role]
 --SELECT * FROM Users
