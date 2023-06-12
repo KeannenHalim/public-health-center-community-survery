@@ -1,4 +1,4 @@
-ALTER PROCEDURE spDeleteQuestion
+ALTER PROCEDURE spDeleteQuestions
     @idQuestions VARCHAR(256)
 AS
     DECLARE curId CURSOR 
