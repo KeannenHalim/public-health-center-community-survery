@@ -2,11 +2,13 @@ ALTER PROCEDURE spDeleteForm
 	@idForm int
 
 AS
-	UPDATE
-		Form
-	SET
-		isAlive = 0
-	WHERE
-		idForm = @idForm
+	BEGIN TRANSACTION
+		UPDATE
+			Form
+		SET
+			isAlive = 0
+		WHERE
+			idForm = @idForm
+	COMMIT TRANSACTION
 
 EXEC spDeleteForm 1
