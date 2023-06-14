@@ -6,14 +6,12 @@ AS
 	DECLARE
 		@idRole INT
 
-	BEGIN TRANSACTION
-		SELECT
-			@idRole=idRole
-		FROM
-			[Role]
-		WHERE
-			roleName=@role
-	COMMIT TRANSACTION
+	SELECT
+		@idRole=idRole
+	FROM
+		[Role]
+	WHERE
+		roleName=@role
 
 	BEGIN TRANSACTION
 		INSERT INTO 

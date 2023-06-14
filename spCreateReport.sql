@@ -15,7 +15,6 @@ AS
     SET @columnDate = ''
     SET @columnText = ''
 
-
 	BEGIN TRANSACTION
 
 		SELECT @guid1=REPLACE(NEWID(),'-','')
