@@ -18,12 +18,14 @@ AS
 
     WHILE @@FETCH_STATUS=0
     BEGIN
-        UPDATE Questions
-        SET isAlive = 0
-        WHERE idQuestion = @currIdQuestion
+		BEGIN TRANSACTION
+			UPDATE Questions
+			SET isAlive = 0
+			WHERE idQuestion = @currIdQuestion
 
-        FETCH NEXT FROM curId INTO
-        @currIdQuestion
+			FETCH NEXT FROM curId INTO
+			@currIdQuestion
+		COMMIT TRANSACTION
     END
 
     CLOSE curId
