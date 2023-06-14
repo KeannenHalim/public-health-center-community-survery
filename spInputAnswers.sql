@@ -1,4 +1,4 @@
-ALTER PROCEDURE spInputAnswer
+ALTER PROCEDURE spInputAnswers
     @keyValueString VARCHAR(MAX),
     @idUser INT,
     @idForm INT

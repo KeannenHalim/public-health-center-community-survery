@@ -1,4 +1,4 @@
-ALTER PROCEDURE spCreateQuestion
+ALTER PROCEDURE spCreateQuestions
 	@idForm INT,
 	@questions varchar(MAX)
 AS
