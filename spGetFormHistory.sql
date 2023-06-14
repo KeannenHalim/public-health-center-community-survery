@@ -5,34 +5,30 @@ CREATE PROCEDURE spGetFormHistory
 AS
 	IF (@timestampStart IS NULL AND @timestampEnd IS NULL)
 	BEGIN
-		BEGIN TRANSACTION
-			SELECT
-				[timeStamp],
-				prevValue,
-				username
-			FROM
-				LogChangeForm
-				INNER JOIN Users
-					ON LogChangeForm.fkUser=Users.idUser
-			WHERE
-				fkForm=@idForm
-		COMMIT TRANSACTION
+		SELECT
+			[timeStamp],
+			prevValue,
+			username
+		FROM
+			LogChangeForm
+			INNER JOIN Users
+				ON LogChangeForm.fkUser=Users.idUser
+		WHERE
+			fkForm=@idForm
 	END
 	ELSE
 	BEGIN
-		BEGIN TRANSACTION
-			SELECT
-				[timeStamp],
-				prevValue,
-				username
-			FROM
-				LogChangeForm INNER JOIN Users
-					ON LogChangeForm.fkUser=Users.idUser
-			WHERE
-				fkForm=@idForm
-				AND [timeStamp]>=@timestampStart 
-				AND [timeStamp]<=@timestampEnd
-		COMMIT TRANSACTION
+		SELECT
+			[timeStamp],
+			prevValue,
+			username
+		FROM
+			LogChangeForm INNER JOIN Users
+				ON LogChangeForm.fkUser=Users.idUser
+		WHERE
+			fkForm=@idForm
+			AND [timeStamp]>=@timestampStart 
+			AND [timeStamp]<=@timestampEnd
 	END
 
 --EXEC spGetFormHistory 1, NULL, NULL
