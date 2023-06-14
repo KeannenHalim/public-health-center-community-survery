@@ -1,7 +1,7 @@
 ALTER PROCEDURE spCreateUser
-	@username VARCHAR(128),
+	@username VARCHAR(30),
 	@password VARCHAR(128),
-	@role VARCHAR(32)
+	@role VARCHAR(20)
 AS
 	DECLARE
 		@idRole INT

@@ -1,6 +1,8 @@
 ALTER PROCEDURE spGenerateTablePivot
     @idForm INT,
-    @filter NVARCHAR(1000)
+    @filter NVARCHAR(1000),
+    @agregat NVARCHAR(1000),
+    @isForAgregat BIT
 AS
     DECLARE 
         @columnNumeric NVARCHAR(256),
@@ -271,28 +273,40 @@ AS
         )as p'
         EXEC sp_executesql @queryText
     END
+
+    IF @isForAgregat = 0
+    BEGIN
     SET @queryText ='select '+CONCAT('##tempText_',@guid1)+
                     '.idAnswerGroup'
-    IF LEN(@columnResult) != 0
-    BEGIN
-        SET @queryText+=','
+        IF LEN(@columnResult) != 0
+        BEGIN
+            SET @queryText+=','+@columnResult
+        END
     END
-    SET @queryText+=@columnResult+' from '+
+    ELSE
+    BEGIN
+        SET @queryText ='select '
+		SET @queryText += @agregat
+    END
+
+    SET @queryText+=' from '+
                     CONCAT('##tempText_',@guid1)+' full outer join '+
                     CONCAT('##tempNumeric_',@guid1)+' ON '+CONCAT('##tempText_',@guid1)+
                     '.idAnswerGroup = '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup'+
                     ' full outer join '+CONCAT('##tempDate_',@guid1)+' ON '+CONCAT('##tempNumeric_',@guid1)+'.idAnswerGroup = '+
                     CONCAT('##tempDate_',@guid1)+'.idAnswerGroup'
-    
     IF @filter is not NULL
     BEGIN
         SET @queryText = @queryText+ ' WHERE '+@filter
     END
     EXEC sp_executesql @queryText
     
-    SELECT *
-    FROM 
-        #tempQuestion
+    IF @isForAgregat = 0
+    BEGIN
+        SELECT *
+        FROM 
+            #tempQuestion
+    END
 
     --untuk drop tablenya
     SET @queryText = 'drop table ##tempText_'+@guid1

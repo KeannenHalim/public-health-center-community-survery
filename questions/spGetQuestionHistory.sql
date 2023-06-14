@@ -15,6 +15,8 @@ AS
 				ON LogChangeQuestions.fkUser=Users.idUser
 		WHERE
 			fkQuestions=@idQuestion
+		ORDER BY
+			[timeStamp]
 	END
 	ELSE
 	BEGIN
@@ -29,6 +31,8 @@ AS
 			fkQuestions=@idQuestion
 			AND [timeStamp]>=@timestampStart 
 			AND [timeStamp]<=@timestampEnd
+		ORDER BY
+			[timeStamp]
 	END
 
 --SELECT * FROM Questions

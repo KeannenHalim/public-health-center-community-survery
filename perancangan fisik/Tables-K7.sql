@@ -76,7 +76,7 @@ CREATE TABLE Role(
 CREATE TABLE Users(
 	idUser int IDENTITY(1,1) PRIMARY KEY,
 	username varchar(30),
-	password varchar(30),
+	password varchar(128), --soalnya di encode pake sha 256
 	fkRole int
 );
 

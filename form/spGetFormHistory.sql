@@ -1,4 +1,4 @@
-CREATE PROCEDURE spGetFormHistory
+ALTER PROCEDURE spGetFormHistory
 	@idForm INT,
 	@timestampStart DATETIME,
 	@timestampEnd DATETIME
@@ -15,6 +15,8 @@ AS
 				ON LogChangeForm.fkUser=Users.idUser
 		WHERE
 			fkForm=@idForm
+		ORDER BY
+			[timeStamp]
 	END
 	ELSE
 	BEGIN
@@ -29,6 +31,8 @@ AS
 			fkForm=@idForm
 			AND [timeStamp]>=@timestampStart 
 			AND [timeStamp]<=@timestampEnd
+		ORDER BY
+			[timeStamp]
 	END
 
 --EXEC spGetFormHistory 1, NULL, NULL
