@@ -4,7 +4,11 @@ ALTER PROCEDURE spChangeForm
 	@newTitle VARCHAR(256)
 AS
 	DECLARE
-		@prevTitle VARCHAR(256)
+		@prevTitle VARCHAR(256),
+		@timenow datetime
+	
+	SELECT 
+		@timenow = GETDATE()
 
 	SELECT
 		@prevTitle=title
@@ -14,8 +18,13 @@ AS
 		idForm=@idForm
 	
 	BEGIN TRANSACTION
+		UPDATE Form
+		SET timeStamp = @timenow
+		WHERE
+			idForm = @idForm
+
 		INSERT INTO LogChangeForm (prevValue, [timeStamp], fkUser, fkForm)
-		VALUES (@prevTitle, GETDATE(), @idUser, @idForm)
+		VALUES (@prevTitle, @timenow, @idUser, @idForm)
 
 		UPDATE Form
 		SET
