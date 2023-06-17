@@ -85,7 +85,7 @@ CREATE TABLE Users(
 --tipe data bit di sql server = 0 (false), 1 (true) dan null
 
 CREATE TABLE AnswerItemText(
-	id int IDENTITY(1,1) PRIMARY KEY,
+	id int IDENTITY(1,1) PRIMARY KEY NONCLUSTERED,
 	answer varchar(150),
 	timestamp datetime,
 	isLatest bit,
@@ -94,10 +94,13 @@ CREATE TABLE AnswerItemText(
 	fkQuestion int
 );
 
+CREATE CLUSTERED INDEX idx_answerItemText
+	ON dbo.AnswerItemText(fkQuestion)
+
 -------------------------------------------------------------------------------------------------
 
 CREATE TABLE AnswerItemNumeric(
-	id int IDENTITY(1,1) PRIMARY KEY,
+	id int IDENTITY(1,1) PRIMARY KEY NONCLUSTERED,
 	answer INT,
 	timestamp datetime,
 	isLatest bit,
@@ -106,10 +109,13 @@ CREATE TABLE AnswerItemNumeric(
 	fkQuestion int
 );
 
+CREATE CLUSTERED INDEX idx_answerItemNumeric
+	ON dbo.AnswerItemNumeric(fkQuestion)
+
 -------------------------------------------------------------------------------------------------
 
 CREATE TABLE AnswerItemDate(
-	id int IDENTITY(1,1) PRIMARY KEY,
+	id int IDENTITY(1,1) PRIMARY KEY NONCLUSTERED,
 	answer date,
 	timestamp datetime,
 	isLatest bit,
@@ -117,6 +123,9 @@ CREATE TABLE AnswerItemDate(
 	fkAnswerGroup int,
 	fkQuestion int
 );
+
+CREATE CLUSTERED INDEX idx_answerItemDate
+	ON dbo.AnswerItemDate(fkQuestion)
 
 -------------------------------------------------------------------------------------------------
 
@@ -141,10 +150,13 @@ CREATE TABLE Form(
 -------------------------------------------------------------------------------------------------
 
 CREATE TABLE AnswerGroup(
-	idAnswer int IDENTITY(1,1) PRIMARY KEY,
+	idAnswer int IDENTITY(1,1) PRIMARY KEY NONCLUSTERED,
 	timeStamp datetime,
 	fkForm int
 );
+
+CREATE CLUSTERED INDEX idx_answerGroup
+	ON dbo.AnswerGroup(timeStamp)
 
 -------------------------------------------------------------------------------------------------
 
@@ -155,6 +167,9 @@ CREATE TABLE LogChangeQuestions(
 	fkQuestions int
 );
 
+CREATE CLUSTERED INDEX idx_logChangeQuestions
+	ON dbo.LogChangeQuestions(timeStamp)
+
 -------------------------------------------------------------------------------------------------
 
 CREATE TABLE LogChangeForm(
@@ -163,5 +178,8 @@ CREATE TABLE LogChangeForm(
 	fkUser int,
 	fkForm int
 );
+
+CREATE CLUSTERED INDEX idx_logChangeForm
+	ON dbo.LogChangeForm(timeStamp)
 
 -------------------------------------------------------------------------------------------------
