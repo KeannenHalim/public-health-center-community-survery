@@ -1,6 +1,8 @@
 ALTER PROCEDURE spDeleteUser
     @username VARCHAR(30)
 AS 
-    DELETE FROM Users
-    WHERE
-        username = @username
+    BEGIN TRANSACTION
+        DELETE FROM Users
+        WHERE
+            username = @username
+    COMMIT TRANSACTION
