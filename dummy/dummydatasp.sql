@@ -16,12 +16,10 @@ DBCC CHECKIDENT ('[AnswerItemNumeric]', RESEED, 0);
 DELETE FROM AnswerItemText
 DBCC CHECKIDENT ('[AnswerItemText]', RESEED, 0);
 
-INSERT INTO
-	[Role](roleName)
-VALUES
-	('kader'),
-	('penanggung jawab'),
-	('admin')
+
+EXEC dbo.spInsertRole 'kader'
+EXEC dbo.spInsertRole 'penanggung jawab'
+EXEC dbo.spInsertRole 'admin'
 
 --SELECT * FROM [Role]
 
