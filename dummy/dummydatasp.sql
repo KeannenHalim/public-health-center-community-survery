@@ -31,13 +31,14 @@ EXEC dbo.spCreateUser 'vito', 'password', 'kader'
 
 --SELECT idUser, username, roleName FROM Users INNER JOIN [Role] ON Users.fkRole=[Role].idRole
 
+--jalankan exec 1 per 1 karena kalau tidak akan menimbulkan error fk
 EXEC dbo.spCreateForm 'Survei Akses Pelayanan dan Pembiayaan Kesehatan'
 EXEC dbo.spCreateQuestions 1, 'T;Nama Lengkap,D;Tanggal Lahir,T;Umur,T;Jenis Kelamin,T;Pendidikan,T;Pekerjaan,N;Jumlah Penghasilan per Bulan,T;Penerima BLT?'
 EXEC dbo.spCreateQuestions 1, 'T;Bila Anda atau anggota keluarga sakit di mana berobatnya?,T;Berapa jarak dari rumah Anda sampai ke fasilitas kesehatan yang ada?,T;Apa sarana transportasi yang digunakan?,T;Apakah keluarga Anda memiliki jaminan kesehatan BPJS/KIS/Asuransi Swasta?'
-
+--------------------------
 
 --SELECT * FROM Questions
-
+--boleh dijalankan sekaligus
 EXEC dbo.spInputAnswers '1;Cagak Thamrin,2;1999-01-01,3;77,4;Pria,5;Sarjana,6;Wirausaha,7;1786383,8;a. Ya,9;b. Tradisional/Alternatif,10;a. Kurang dari 1 KM,11;Kendaraan umum,12;a. BPJ', 3, 1
 EXEC dbo.spInputAnswers '1;Lasmanto Salahudin,2;1999-01-01,3;93,4;Pria,5;SMP,6;TNI,7;4226675,8;b. Tidak,9;b. Tradisional/Alternatif,10;b. 1-5 KM,11;b. Kendaraan pribadi,12;a. BPJ', 4, 1
 EXEC dbo.spInputAnswers '1;Farah Zulaika,2;1999-01-01,3;61,4;Wanita,5;SMA,6;Guru,7;7099420,8;b. Tidak,9;b. Tradisional/Alternatif,10;c. 6-10 KM,11;a. Jalan kaki,12;c. Asuransi swasta', 5, 1
@@ -194,12 +195,13 @@ EXEC dbo.spInputAnswers '1;Kiandra Sudiati,2;1999-01-01,3;87,4;Wanita,5;Doktor,6
 --SELECT * FROM AnswerItemNumeric
 --SELECT * FROM AnswerItemText
 
+--jalankan exec 1 per 1 kalau tidak akan menimbulkan error fk
 EXEC dbo.spCreateForm 'Survei Kesehatan Lansia'
 EXEC dbo.spCreateQuestions 2, 'T;Nama Lengkap,D;Tanggal Lahir,T;Umur,T;Jenis Kelamin,T;Pendidikan,T;Pekerjaan,N;Jumlah Penghasilan per Bulan,T;Penerima BLT?'
 EXEC dbo.spCreateQuestions 2, 'T;Apakah di rumah Anda ada lansia?,T;Apakah ada Posyandu Lansia di tempat Anda?,T;Apakah Anda memanfaatkan Posyandu Lansia?,T;Penyakit apa yang dimiliki oleh lansia di rumah Anda?'
 
 --SELECT * FROM Questions
-
+--boleh dijalankan sekaligus
 EXEC dbo.spInputAnswers '13;Cagak Thamrin,14;1999-01-01,15;77,16;Pria,17;Sarjana,18;Wirausaha,19;6650194,20;b. Tidak,21;a. Ya,22;a. Ya,23;b. Tidak,24;a. Rematik', 3, 2
 EXEC dbo.spInputAnswers '13;Lasmanto Salahudin,14;1999-01-01,15;93,16;Pria,17;SMP,18;TNI,19;9349712,20;b. Tidak,21;b. Tidak,22;b. Tidak,23;b. Tidak,24;b. Hipertensi (Darah Tinggi)', 4, 2
 EXEC dbo.spInputAnswers '13;Farah Zulaika,14;1999-01-01,15;61,16;Wanita,17;SMA,18;Guru,19;9977567,20;b. Tidak,21;b. Tidak,22;a. Ya,23;b. Tidak,24;b. Hipertensi (Darah Tinggi)', 5, 2

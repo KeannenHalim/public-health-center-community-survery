@@ -1,3 +1,5 @@
+/*Semua exec yang ada di sini jangan dijankan sebelum menjalankan data dummy
+karena nantinya akan ada perbedaan id karena urutan memasukkan berubah*/
 /*FUNCTIONS*/
 --sudah ada di SP_CRUD hanya ditulis kembali
 ALTER FUNCTION parseKeyValue (
@@ -465,7 +467,9 @@ AS
         SET @queryText ='select '
 		SET @queryText += @agregat
     END
-
+    /*harus di full outer join bukan inner join karena jika hanya ada sebuah pertanyaan bertipe numeric misalnya
+    dan tidak ada orang yang menjawab pertanyaan tersebut, maka ketika di inner join, tidak akan muncul apa apa
+    karena tidak memenuhi kondisi untuk inner join */
     SET @queryText+=' from '+
                     CONCAT('##tempText_',@guid1)+' full outer join '+
                     CONCAT('##tempNumeric_',@guid1)+' ON '+CONCAT('##tempText_',@guid1)+
@@ -538,6 +542,8 @@ AS
         @idUser as 'idUser',
         @roleName as 'role'
 
+-- exec spLogin 'admin','password'
+-- exec spLogin 'admin5','password'
 ---------------------------------------------
 
 /*FORMS*/
@@ -579,6 +585,7 @@ AS
 			[timeStamp]
 	END
 
+--exec spGetFormHistory 3,'2023-06-04 12:36:28', '2024-06-09 12:37:28'
 ------------------------------------------
 
 /*QUESTIONS*/
@@ -604,6 +611,7 @@ AS
 			parseKeyCharValueVarchar(@questions)
 	COMMIT TRANSACTION
 
+--contoh ada di dummy data
 -----------------------------------------------
 
 CREATE PROCEDURE spChangeQuestions
@@ -663,6 +671,8 @@ AS
 	CLOSE curQuest
 	DEALLOCATE curQuest
 
+--exec spGetQuestion 1,1
+--exec spChangeQuestions 1,'1;NAMA LENGKAP,2;TANGGAL LAHIR'
 --------------------------------------------
 
 CREATE PROCEDURE spInputAnswers
@@ -746,6 +756,7 @@ AS
         
     COMMIT TRANSACTION;
 
+--contoh ada di dummy data
 ---------------------------------------------
 
 CREATE PROCEDURE spGetAnswerAllUser
@@ -754,6 +765,7 @@ CREATE PROCEDURE spGetAnswerAllUser
 AS
     exec spGenerateTablePivot @idForm,@filter,null,0
 
+--exec spGetAnswerAllUser 1,null
 -------------------------------------------
 
 CREATE PROCEDURE spGetQuestionHistory
@@ -793,6 +805,7 @@ AS
 			[timeStamp]
 	END
 
+--exec spGetQuestionHistory 1,'2023-06-04 12:36:28', '2024-06-09 12:37:28'
 ------------------------------------------------
 
 CREATE PROCEDURE spGetQuestionAnswer
@@ -887,6 +900,7 @@ AS
 			[timeStamp]
 	END
 
+--exec spGetQuestionAnswer 1,1
 ----------------------------------------
 
 CREATE PROCEDURE spChangeAnswers
@@ -1025,111 +1039,5 @@ AS
         CLOSE curAnswer
         DEALLOCATE curAnswer
     COMMIT TRANSACTION;
-
-
---SELECT 'TEST: FUNCTION - parseKeyValue'
---SELECT 
---    [key],[value]
---FROM
---    parseKeyValue('1;12,2;Ken,3;2023-05-27 14:01:19')
-
---SELECT 'TEST: FUNCTION - parseKeyCharValueVarchar'
--- SELECT 
---     [key],[value]
--- FROM
---     parseKeyCharValueVarchar('N;banyak istri,T;nama istri,D;ttl istri')
-
---SELECT 'TEST: SP - spInsertRole'
--- exec spInsertRole 'raja'
-
---SELECT 'TEST: SP - spGetAllRole'
--- exec spGetAllRole
-
---SELECT 'TEST: SP - spChangeRole'
--- exec spChangeRole 1, 'kaders ni bos'
-
---SELECT 'TEST: SP - spDeleteRole'
--- exec spDeleteRole 'raja'
-
---SELECT 'TEST: SP - spCreateUser'
---SELECT * FROM Users
---EXEC spCreateUser 'dummy_user', 'password', 'kader'
---SELECT * FROM Users
-
---SELECT 'TEST: SP - spGetAllUser'
--- exec spGetAllUser
-
---SELECT 'TEST: SP - spChangeUser'
--- exec spGetAllUser
--- EXEC spChangeUser 1, 'ganti uname nih boss', NULL, NULL
--- exec spGetAllUser
-
---SELECT 'TEST: SP - spDeleteUser'
--- exec spGetAllUser
--- EXEC spChangeUser 1, 'ganti uname nih boss', NULL, NULL
--- exec spGetAllUser
-
---SELECT 'TEST: SP - spLogin'
--- exec spLogin 'admin','password'
---exec spLogin 'abc','abc'
-
---SELECT 'TEST: SP - spCreateForm'
---EXEC spCreateForm 'test form2'
---SELECT * FROM Form
-
---SELECT 'TEST: SP - spGetForm'
---EXEC spGetForm NULL,1
---EXEC spGetForm 'akses' ,0
-
---SELECT 'TEST: SP - spGetFormHistory'
---EXEC spGetFormHistory 1, NULL, NULL
---EXEC spGetFormHistory 1, '2023-06-10 17:35:27.307', '2023-06-10 17:35:27.307'
-
---SELECT 'TEST: SP - spChangeForm'
---SELECT * FROM Form
---EXEC spChangeForm 1, 1, 'survei akses pelayanan dan pembiayaan kesehatan'
---EXEC spChangeForm 1, 1, 'Survei Akses Pelayanan dan Pembiayaan Kesehatan'
---EXEC spChangeForm 1, 2, 'Survei Akses Pelayanan dan Pembiayaan Kesehatan'
---EXEC spChangeForm 1, 2, 'Survei Kesehatan Lansia'
---SELECT * FROM Form
-
---SELECT 'TEST: SP - spDeleteForm'
---SELECT * FROM Form
---SELECT * FROM LogChangeForm
---EXEC spDeleteForm 1, 3
---SELECT * FROM Form
---SELECT * FROM LogChangeForm
-
---SELECT 'TEST: SP - spCreateQuestions'
---SELECT * FROM Questions
--- EXEC spCreateQuestions 99, 'N;banyak istri,T;nama istri,D;ttl istri'
---SELECT * FROM Questions
-
---SELECT 'TEST: SP - spGetQuestion'
---EXEC spGetQuestion 1,1
-
---SELECT 'TEST: SP - spGetQuestion'
--- SELECT * FROM Questions
--- EXEC spChangeQuestion 1 , '2;Lahir tanggal,1;nama lengkap banget'
--- SELECT * FROM Questions
-
---SELECT 'TEST: SP - spDeleteQuestion'
--- SELECT * FROM Questions
--- EXEC spDeleteQuestions '1;2'
--- SELECT * FROM Questions
-
---SELECT 'TEST: SP - spInputAnswers'
--- exec spInputAnswers '2;12,3;Ken,4;2023-05-27 14:01:19', 1,1
-
---SELECT 'TEST: SP - spGetAnswerGroup'
--- EXEC spGetAnswerGroup 1, '2023-06-04 12:36:28', '2023-06-09 12:37:28'
---SELECT * FROM AnswerGroup
-
---SELECT 'TEST: SP - spGetAnswerAllUser'
--- exec spGetAnswerAllUser 1,null
-
---SELECT 'TEST: SP - spGetQuestionAnswer'
--- EXEC spGetQuestionAnswer 1,0
-
---SELECT 'TEST: SP - spChangeAnswers'
--- exec spChangeAnswers '1;Cagak Thamrin,2;1999-01-01,3;77,4;Pria,5;Sarjana,6;Wirausaha,7;1786383,8;a. Ya,9;b. Tradisional/CREATEnatif,10;a. Kurang dari 1 KM,11;Kendaraan umum,12;a. BPJ', 3, 1,1
+--exec spGetQuestionAnswer 1,1
+--exec spChangeAnswers '1;superman,3;2000',1,1,1
